@@ -98,12 +98,14 @@
             </td>
             <td style="width: 30%; text-align: right; vertical-align: top; border: none;"></td>
         </tr>
+        <tr>
+            <td style="width: 33%; text-align: left; border: none;"><span style="text-align: left;">Data: {{ date('d-m-Y', strtotime($firstItem['date'])) }}</span></td>
+            <td style="width: 33%; text-align: center; vertical-align: top; border: none;"><span style="text-align: right;">Furnitori: {{ $firstItem['furnitori']['name'] }}</span><br></td>
+            <td style="width: 33%; text-align: right; vertical-align: top; border: none;"><span style="text-align: right;">Kategoria: {{ $firstItem['kategoria']['name'] }}</span></td>
+        </tr>
     </table>
-    <div class="header-info" style="margin-top: 0;">
-        <span style="text-align: left;">Data: {{ date('d-m-Y', strtotime($firstItem['date'])) }}</span> <br>
-        <span style="text-align: right;">Furnitori: {{ $firstItem['furnitori']['name'] }}</span><br>
-        <span style="text-align: right;">Kategoria: {{ $firstItem['kategoria']['name'] }}</span><br>
-    </div>
+    <br>
+
 
 @else
     <p>No details found.</p>
