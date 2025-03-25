@@ -31,7 +31,7 @@
 
         /* Set the background color of the entire cell */
         td {
-            background-color: lightyellow;
+            background-color: #f5f6fd;
             padding: 0;
         }
     </style>
