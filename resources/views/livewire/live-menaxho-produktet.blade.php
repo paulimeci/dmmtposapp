@@ -1,5 +1,7 @@
 <div>
-        <div class="container-fluid">
+    <div class="page-content">
+
+    <div class="container-fluid">
 
             <!-- start page title -->
             <div class="row">
@@ -126,7 +128,12 @@
                                         <td>{{ $item->quantity }}</td>
                                         <td>{{ $item->category->name }}</td>
                                         <td>
-                                            <button class="btn btn-info sm" data-bs-toggle="modal" data-bs-target="#editProductModal{{ $item->id }}" onclick="loadEditForm({{ $item->id }})" title="Edit Data">
+                                            <button
+                                                class="btn btn-info sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editProductModal{{ $item->id }}"
+                                                onclick="loadEditForm({{ $item->id }})"
+                                                title="Edit Data">
                                                 <i class="fas fa-edit"></i>
                                             </button>
 

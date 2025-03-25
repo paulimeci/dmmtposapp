@@ -8,7 +8,6 @@ use Livewire\Component;
 
 class LiveAddFurnitor extends Component
 {
-
     public $name;
     public $phone;
     public $email;
@@ -18,22 +17,37 @@ class LiveAddFurnitor extends Component
     public $edit_email;
     public $edit_address;
     public $edit_furnitor_id;
-    public function storeFurnitor (){
-        Furnitoret::insert([
+
+    protected $listeners = ['refreshDatatable' => '$refresh'];
+
+    public function storeFurnitor()
+    {
+        $this->validate([
+            'name' => 'required',
+            'phone' => 'required',
+        ]);
+
+        Furnitoret::create([
             'name' => $this->name,
             'phone' => $this->phone,
             'email' => $this->email,
             'adresa' => $this->address,
-
         ]);
+
+        $this->reset(['name', 'phone', 'email', 'address']);
+        $this->dispatch('close-modal', id: 'addSupplierModal');
+        $this->dispatch('refreshDatatable');
     }
-    public function fshijFurnitor ($id)
+
+    public function fshijFurnitor($id)
     {
-        $check_if_exist=Produkti::where('furnitor_id',$id)->exists();
-        if(!$check_if_exist){
+        $check_if_exist = Produkti::where('furnitor_id', $id)->exists();
+        if (!$check_if_exist) {
             Furnitoret::find($id)->delete();
+            $this->dispatch('refreshDatatable');
         }
     }
+
     public function editFurnitor($id)
     {
         $furnitor = Furnitoret::findOrFail($id);
@@ -42,14 +56,13 @@ class LiveAddFurnitor extends Component
         $this->edit_phone = $furnitor->phone;
         $this->edit_email = $furnitor->email;
         $this->edit_address = $furnitor->adresa;
-        $this->dispatch('show-edit-modal');
     }
 
     public function updateFurnitor()
     {
         $this->validate([
             'edit_name' => 'required',
-
+            'edit_phone' => 'required',
         ]);
 
         Furnitoret::find($this->edit_furnitor_id)->update([
@@ -59,12 +72,14 @@ class LiveAddFurnitor extends Component
             'adresa' => $this->edit_address,
         ]);
 
-        $this->dispatch('hide-edit-modal');
-        session()->flash('message', 'Furnitor updated successfully!');
+        $this->dispatch('close-modal', id: 'editSupplierModal'.$this->edit_furnitor_id);
+        $this->dispatch('refreshDatatable');
     }
+
     public function render()
     {
-        $furnitoret=Furnitoret::all();
-        return view('livewire.live-add-furnitor',compact('furnitoret'));
+        return view('livewire.live-add-furnitor', [
+            'furnitoret' => Furnitoret::all()
+        ]);
     }
 }
