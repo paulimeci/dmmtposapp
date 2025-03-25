@@ -20,7 +20,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <a href="{{route('shto.blerjet')}}" class="btn btn-dark btn-rounded waves-effect waves-light" style="float:right;"><i class="fas fa-plus-circle"> Add Purchase </i></a> <br>  <br>
+                            <a href="{{route('shto.blerjet')}}" class="btn btn-dark btn-rounded waves-effect waves-light" style="float:right;"><i class="fas fa-plus-circle"> Shto blerje </i></a> <br>  <br>
 
                             <h4 class="card-title">Te gjitha blerjet </h4>
 
@@ -32,8 +32,8 @@
                                     <th>Nr Fature</th>
                                     <th>Date</th>
                                     <th>Furnitori</th>
-                                    <th>Total Cmimi Blerjes</th>
-                                    <th>ViewMore</th>
+                                    <th>Totali</th>
+                                    <th>+</th>
 
                                 </thead>
 
@@ -53,10 +53,13 @@
                                         <td>
                                             <button
                                             type="button"
+                                            class="btn btn-info icon-btn b-r-4"
                                             data-bs-toggle="modal"
                                             data-bs-target="#viewCardModal"
                                             wire:click="viewMore({{ $item->nr_fature }})"
-                                            ></button>
+                                            >
+                                                <i class="fas fa-list"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -116,12 +119,11 @@
                                         <div class="modal-footer">
                                             <button
                                                 type="button"
-                                                class="btn btn-warning icon-btn b-r-4"
+                                                class="btn btn-success icon-btn b-r-4"
                                                 data-bs-toggle="modal"
                                                 onclick="{{ $firstItem ? "window.open('" . route('shkarko_faturen', $firstItem['nr_fature']) . "', '_blank')" : "alert('No invoice data available');" }}"
-                                        {{ !$firstItem ? 'disabled' : '' }} <!-- Disable the button if $firstItem is null -->
-                                            >
-                                            <i class="ti ti-download"></i>
+                                        {{ !$firstItem ? 'disabled' : '' }}>
+                                            <i class="fa fa-download"></i>
                                             </button>
 
                                             <button

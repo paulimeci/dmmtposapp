@@ -80,7 +80,7 @@
                                 <div class="col-md-3 align-self-end"> <!-- Align the "Add More" button to the bottom -->
                                     <div class="md-3">
                                         <label for="example-text-input" class="form-label" style="margin-top:43px;">  </label>
-                                        <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore"> Add More</i>
+                                        <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore"> Shto</i>
                                     </div>
                                 </div>
                             </div> <!-- // end row  -->
@@ -111,7 +111,7 @@
 
                                     <tbody>
                                     <tr>
-                                        <td colspan="2">Discount (%)</td>
+                                        <td colspan="2">Zbritja  (%)</td>
                                         <td colspan="3">
                                             <input type="number" name="discount_percentage" id="discount_percentage" class="form-control estimated_amount" value="0" placeholder="Discount Percentage">
                                         </td>
@@ -119,7 +119,7 @@
 
                                     <!-- Modify the Grand Total input field to reflect the discounted total -->
                                     <tr>
-                                        <td colspan="2">Grand Total</td>
+                                        <td colspan="2">Shuma totale</td>
                                         <td colspan="3">
                                             <input type="text" name="estimated_amount" value="0" id="estimated_amount" class="form-control estimated_amount" readonly style="background-color: #ddd;">
                                         </td>
@@ -130,7 +130,7 @@
 
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <textarea name="description" class="form-control" id="description" placeholder="Write Description Here"></textarea>
+                                        <textarea name="description" class="form-control" id="description" placeholder="Shkruani nje pershkrim ketu"></textarea>
                                     </div>
                                 </div><br>
 
@@ -186,10 +186,12 @@
                 var product_id = product_li.data('productId');
                 var price = product_li.data('price');
                 var cmimi_blerjes = product_li.data('cmimiBlerjes');
+                var stockQuantity = product_li.data('quantity'); // Get the stock quantity from the selected product
 
                 // Debugging: Log the retrieved product data
                 console.log("Product Price:", price);
                 console.log("Product Cmimi Blerjes:", cmimi_blerjes);
+                console.log("Stock Quantity:", stockQuantity);
 
                 if(date === ''){
                     $.notify("Date is Required", { globalPosition: 'top right', className:'error' });
@@ -200,7 +202,10 @@
                     $.notify("Product Field is Required", { globalPosition: 'top right', className:'error' });
                     return false;
                 }
+
                 $('#searchBox').val('');
+                $('#current_stock_qty').val(''); // Clear the stock quantity field after adding
+
                 var source = $("#document-template").html();
                 var template = Handlebars.compile(source);
                 var data = {
@@ -208,8 +213,9 @@
                     invoice_no: invoice_no,
                     product_id: product_id,
                     product_name: product_name,
-                    unit_price: price, // Add price to the data object
-                    cmimi_blerjes: cmimi_blerjes // Add cmimi_blerjes to the data object
+                    unit_price: price,
+                    cmimi_blerjes: cmimi_blerjes,
+                    quantity: stockQuantity // Pass the stock quantity to the template
                 };
                 var html = template(data);
                 $("#addRow").append(html);
@@ -268,9 +274,10 @@
                 filteredProducts.forEach(function(product) {
                     var li = document.createElement("li");
                     li.textContent = product.name;
-                    li.dataset.productId = product.id; // Add product ID as a dataset attribute
-                    li.dataset.price = product.cmimi.price; // Add product price as a dataset attribute
-                    li.dataset.cmimiBlerjes = product.cmimi.cmimi_blerjes; // Add product cmimi_blerjes as a dataset attribute
+                    li.dataset.productId = product.id; // Add product ID
+                    li.dataset.price = product.cmimi.price; // Add product price
+                    li.dataset.cmimiBlerjes = product.cmimi.cmimi_blerjes; // Add cmimi_blerjes
+                    li.dataset.quantity = product.quantity; // Add stock quantity
                     ul.appendChild(li);
                 });
 
@@ -281,8 +288,10 @@
                         var selectedProduct = target.textContent;
                         document.getElementById("searchBox").value = selectedProduct;
                         document.getElementById("dropdown").style.display = "none";
-                        var productId = target.dataset.productId; // Get the product ID from the dataset attribute
-                        document.getElementById("product_id").value = productId; // Set the product ID in the hidden input
+
+                        // Set the stock quantity when a product is selected
+                        var stockQuantity = target.dataset.quantity;
+                        document.getElementById("current_stock_qty").value = stockQuantity;
                     }
                 });
             }
@@ -298,6 +307,7 @@
                     populateDropdownList(products, filter);
                 } else {
                     dropdown.style.display = "none";
+                    document.getElementById("current_stock_qty").value = ""; // Clear stock when search is cleared
                 }
             });
         });
