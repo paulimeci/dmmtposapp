@@ -61,12 +61,7 @@ Route::middleware(['auth', 'status-punonjes:1'])->group(function(){
         });
 
         Route::controller(FurnitoretController::class)->group(function(){
-            Route::get('/shto/furnitor', 'shtoFurnitor')->name('shto.furnitor');
-            Route::post('/store/furnitor', 'storeFurnitor')->name('store.furnitor');
             Route::get('/shiko/furnitor', 'shikoFurnitor')->name('shiko.furnitor');
-            Route::get('/edit/furnitor/{id}', 'editFurnitor')->name('edit.furnitor');
-            Route::get('/fshij/furnitor/{id}', 'fshijFurnitor')->name('fshij.furnitor');
-            Route::post('/update/furnitor', 'updateFurnitor')->name('furnitor.update');
         });
 
         Route::controller(BlerjetController::class)->group(function(){

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('blerjet', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->integer('nr_fature')->nullable();
+            $table->bigInteger('nr_fature')->nullable();
             $table->integer('furnitor_id')->nullable();
             $table->integer('kategori_id')->nullable();
             $table->integer('produkt_id')->nullable();

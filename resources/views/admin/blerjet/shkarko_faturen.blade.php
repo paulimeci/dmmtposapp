@@ -130,13 +130,13 @@
             <td>{{$lb->produkti->name}}</td>
             <td>{{$lb->sasia}}</td>
             <td>{{$lb->cmimi_blerjes}}</td>
-            <td>{{$lb->sasia * $lb->cmimi_blerjes}}</td>
+            <td style="text-align: right">{{$lb->sasia * $lb->cmimi_blerjes}}</td>
         </tr>
         @php $totali += $lb->sasia * $lb->cmimi_blerjes;@endphp
     @endforeach
     <tr style="font-size: 14px; font-weight: bold; background-color: #f2f2f2;">
         <td colspan="3" style="padding: 10px;">TOTALI</td>
-        <td colspan="2" style="padding: 10px;">{{ $totali }}</td>
+        <td colspan="2" style="padding: 10px; text-align: right">{{ $totali }}</td>
     </tr>
     </tbody>
 </table>
