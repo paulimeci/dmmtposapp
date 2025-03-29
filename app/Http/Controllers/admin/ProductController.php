@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CmimiShitjesLogs;
 use App\Models\Furnitoret;
 use App\Models\Kategorite;
 use App\Models\Njesia;
@@ -11,7 +12,6 @@ use App\Models\Produkti;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Carbon;
-
 class ProductController extends Controller
 {
     //
@@ -73,9 +73,9 @@ class ProductController extends Controller
 
     }
 
-    public function perditesoProduktin(Request $request){
+    public function perditesoProduktin(Request $request) {
+        // Update the main product
         Produkti::findOrFail($request->id)->update([
-
             'name' => $request->name,
             'njesia_id' => $request->unit_id,
             'furnitor_id' => $request->furnitori_id,
@@ -83,14 +83,29 @@ class ProductController extends Controller
             'quantity' => $request->quantity,
         ]);
 
+        // Get the product price record
+        $productPrice = ProductQP::where('product_id', $request->id)->first();
+
+        // Check if price has changed and log if it has
+        if($request->cmimi != $productPrice->price) {
+            CmimiShitjesLogs::create([
+                'product_id' => $request->id,
+                'cmimi_vjeter' => $productPrice->price,
+                'cmimi_ri' => $request->cmimi,
+                'user_id' => Auth::user()->id,
+            ]);
+        }
+
+        // Update the product price
+        $productPrice->price = $request->cmimi;
+        $productPrice->cmimi_blerjes = $request->cmimi_blerjes;
+        $productPrice->save();
+
         $notification = array(
             'message' => 'Product Updated Successfully',
             'alert-type' => 'success'
         );
-        $perditsimi2= ProductQP::where('product_id', $request->id)->first();
-        $perditsimi2->price=$request->cmimi;
-        $perditsimi2->cmimi_blerjes=$request->cmimi_blerjes;
-        $perditsimi2->save();
+
         return redirect()->route('shiko.produktet')->with($notification);
     }
 
